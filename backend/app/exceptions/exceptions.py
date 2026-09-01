@@ -33,6 +33,21 @@ class AdminRequiredError(AppError):
     code = "ADMIN_REQUIRED"
 
 
+class StudyRecordForbiddenError(AppError):
+    status_code = 403
+    code = "STUDY_RECORD_FORBIDDEN"
+
+
+class StudyRecordNotFoundError(AppError):
+    status_code = 404
+    code = "STUDY_RECORD_NOT_FOUND"
+
+
+class CategoryNotFoundError(AppError):
+    status_code = 404
+    code = "CATEGORY_NOT_FOUND"
+
+
 class CsrfTokenInvalidError(AppError):
     status_code = 403
     code = "CSRF_TOKEN_INVALID"
