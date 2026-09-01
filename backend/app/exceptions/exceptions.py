@@ -58,6 +58,11 @@ class UsernameAlreadyExistsError(AppError):
     code = "USERNAME_ALREADY_EXISTS"
 
 
+class CategoryAlreadyExistsError(AppError):
+    status_code = 409
+    code = "CATEGORY_ALREADY_EXISTS"
+
+
 class ValidationError(AppError):
     status_code = 422
     code = "VALIDATION_ERROR"
