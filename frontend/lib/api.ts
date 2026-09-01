@@ -1,4 +1,5 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8000";
+const CSRF_COOKIE_NAME = "csrf_token";
 
 export class ApiError extends Error {
   code: string;
@@ -10,6 +11,16 @@ export class ApiError extends Error {
     this.code = code;
     this.details = details;
   }
+}
+
+export function getCsrfTokenFromCookie(): string | undefined {
+  if (typeof document === "undefined") {
+    return undefined;
+  }
+  const match = document.cookie.match(
+    new RegExp(`(?:^|; )${CSRF_COOKIE_NAME}=([^;]*)`),
+  );
+  return match ? decodeURIComponent(match[1]) : undefined;
 }
 
 interface ApiFetchOptions extends RequestInit {
