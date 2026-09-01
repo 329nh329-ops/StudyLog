@@ -34,7 +34,7 @@ def require_admin(current_user: User = Depends(get_current_user)) -> User:
     return current_user
 
 
-def verify_csrf_token(request: Request) -> None:
+def verify_csrf_token(request: Request, current_user: User = Depends(get_current_user)) -> None:
     cookie_token = request.cookies.get(settings.csrf_token_cookie_name)
     header_token = request.headers.get(settings.csrf_token_header_name)
     if not cookie_token or not header_token or cookie_token != header_token:
