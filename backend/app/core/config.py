@@ -12,6 +12,10 @@ class Settings(BaseSettings):
     cookie_secure: bool = False
     timezone: str = "Asia/Tokyo"
 
+    access_token_cookie_name: str = "access_token"
+    csrf_token_cookie_name: str = "csrf_token"
+    csrf_token_header_name: str = "X-CSRF-Token"
+
     cors_allow_origins: list[str] = ["http://localhost:3000"]
 
     seed_admin_username: str = "admin"
