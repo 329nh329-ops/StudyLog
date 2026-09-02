@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import { ApiError } from "@/lib/api";
+import { getErrorDetails, toErrorMessage } from "@/lib/api";
 import { register } from "@/lib/auth";
 
 const USERNAME_PATTERN = /^[A-Za-z0-9_-]{1,25}$/;
@@ -75,14 +75,11 @@ export default function RegisterPage() {
       });
       router.push("/login");
     } catch (error) {
-      if (error instanceof ApiError) {
-        if (error.details) {
-          setFieldErrors(error.details);
-        }
-        setFormError(error.message);
-      } else {
-        setFormError("登録に失敗しました。しばらくしてから再度お試しください。");
+      const details = getErrorDetails(error);
+      if (details) {
+        setFieldErrors(details);
       }
+      setFormError(toErrorMessage(error, "登録に失敗しました。しばらくしてから再度お試しください。"));
     } finally {
       setSubmitting(false);
     }

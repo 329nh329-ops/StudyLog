@@ -6,7 +6,7 @@ import Link from "next/link";
 import SearchForm from "@/components/study-record/SearchForm";
 import Pagination from "@/components/common/Pagination";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import { ApiError } from "@/lib/api";
+import { toErrorMessage } from "@/lib/api";
 import { getUserStudyRecords, listUsers } from "@/lib/admin";
 import type { StudyRecordSearchParams } from "@/lib/study-record";
 import { understandingLevelStars } from "@/lib/understanding-level";
@@ -55,7 +55,7 @@ export default function AdminUserStudyRecordsPage() {
       })
       .catch((e) => {
         if (cancelled) return;
-        setError(e instanceof ApiError ? e.message : "学習記録の取得に失敗しました。");
+        setError(toErrorMessage(e, "学習記録の取得に失敗しました。"));
       });
 
     return () => {

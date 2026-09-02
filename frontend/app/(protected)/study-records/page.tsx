@@ -5,7 +5,7 @@ import Link from "next/link";
 import Pagination from "@/components/common/Pagination";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import SearchForm from "@/components/study-record/SearchForm";
-import { ApiError } from "@/lib/api";
+import { toErrorMessage } from "@/lib/api";
 import {
   deleteStudyRecord,
   listStudyRecords,
@@ -36,7 +36,7 @@ export default function StudyRecordsPage() {
       })
       .catch((e) => {
         if (cancelled) return;
-        setError(e instanceof ApiError ? e.message : "学習記録の取得に失敗しました。");
+        setError(toErrorMessage(e, "学習記録の取得に失敗しました。"));
       });
 
     return () => {
@@ -61,7 +61,7 @@ export default function StudyRecordsPage() {
       await deleteStudyRecord(record.id);
       reload();
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "学習記録の削除に失敗しました。");
+      setError(toErrorMessage(e, "学習記録の削除に失敗しました。"));
     }
   }
 

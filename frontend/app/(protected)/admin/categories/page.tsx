@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import { ApiError } from "@/lib/api";
+import { toErrorMessage } from "@/lib/api";
 import { createCategory, deleteCategory, listCategories, updateCategory } from "@/lib/category";
 import type { Category } from "@/types/category";
 
@@ -29,7 +29,7 @@ export default function AdminCategoriesPage() {
       setCategories(data);
       setError(null);
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "カテゴリ一覧の取得に失敗しました。");
+      setError(toErrorMessage(e, "カテゴリ一覧の取得に失敗しました。"));
     }
   }
 
@@ -42,7 +42,7 @@ export default function AdminCategoriesPage() {
       setNewName("");
       await loadCategories();
     } catch (e) {
-      setCreateError(e instanceof ApiError ? e.message : "カテゴリの追加に失敗しました。");
+      setCreateError(toErrorMessage(e, "カテゴリの追加に失敗しました。"));
     } finally {
       setCreating(false);
     }
@@ -69,7 +69,7 @@ export default function AdminCategoriesPage() {
       setEditingName("");
       await loadCategories();
     } catch (e) {
-      setEditError(e instanceof ApiError ? e.message : "カテゴリの更新に失敗しました。");
+      setEditError(toErrorMessage(e, "カテゴリの更新に失敗しました。"));
     } finally {
       setSaving(false);
     }
@@ -83,7 +83,7 @@ export default function AdminCategoriesPage() {
       await deleteCategory(category.id);
       await loadCategories();
     } catch (e) {
-      setError(e instanceof ApiError ? e.message : "カテゴリの削除に失敗しました。");
+      setError(toErrorMessage(e, "カテゴリの削除に失敗しました。"));
     }
   }
 

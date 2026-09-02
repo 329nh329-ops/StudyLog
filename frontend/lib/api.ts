@@ -13,6 +13,14 @@ export class ApiError extends Error {
   }
 }
 
+export function toErrorMessage(error: unknown, fallback: string): string {
+  return error instanceof ApiError ? error.message : fallback;
+}
+
+export function getErrorDetails(error: unknown): Record<string, string> | undefined {
+  return error instanceof ApiError ? error.details : undefined;
+}
+
 export function getCsrfTokenFromCookie(): string | undefined {
   if (typeof document === "undefined") {
     return undefined;
