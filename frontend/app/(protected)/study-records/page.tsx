@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import Pagination from "@/components/common/Pagination";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import SearchForm from "@/components/study-record/SearchForm";
@@ -68,7 +69,7 @@ export default function StudyRecordsPage() {
     <div>
       <h1>学習記録一覧</h1>
 
-      <a href="/study-records/new">学習記録を登録</a>
+      <Link href="/study-records/new">学習記録を登録</Link>
 
       <SearchForm onSearch={handleSearch} />
 
@@ -94,7 +95,7 @@ export default function StudyRecordsPage() {
               <td>{record.study_minutes}分</td>
               <td>{understandingLevelStars(record.understanding_level)}</td>
               <td>
-                <a href={`/study-records/${record.id}/edit`}>編集</a>
+                <Link href={`/study-records/${record.id}/edit`}>編集</Link>
                 <button type="button" onClick={() => handleDelete(record)}>
                   削除
                 </button>

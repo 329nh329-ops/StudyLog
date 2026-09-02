@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useLogout } from "@/lib/auth-context";
 import type { Role } from "@/types/auth";
 import styles from "./Sidebar.module.css";
@@ -22,25 +23,25 @@ export default function Sidebar({ role, open, onClose }: SidebarProps) {
       />
       <aside className={`${styles.sidebar} ${open ? styles.open : ""}`}>
         <nav className={styles.nav}>
-          <a href="/dashboard" onClick={onClose}>
+          <Link href="/dashboard" onClick={onClose}>
             ダッシュボード
-          </a>
-          <a href="/study-records" onClick={onClose}>
+          </Link>
+          <Link href="/study-records" onClick={onClose}>
             学習記録
-          </a>
-          <a href="/study-records/new" onClick={onClose}>
+          </Link>
+          <Link href="/study-records/new" onClick={onClose}>
             学習記録登録
-          </a>
+          </Link>
 
           {role === "ADMIN" && (
             <>
               <hr className={styles.divider} />
-              <a href="/admin/categories" onClick={onClose}>
+              <Link href="/admin/categories" onClick={onClose}>
                 カテゴリ管理
-              </a>
-              <a href="/admin/users" onClick={onClose}>
+              </Link>
+              <Link href="/admin/users" onClick={onClose}>
                 ユーザー管理
-              </a>
+              </Link>
             </>
           )}
 

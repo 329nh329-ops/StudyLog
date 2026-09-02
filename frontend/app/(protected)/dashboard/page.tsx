@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import CategoryChart from "@/components/dashboard/CategoryChart";
 import DailyChart from "@/components/dashboard/DailyChart";
 import MonthlyChart from "@/components/dashboard/MonthlyChart";
@@ -41,7 +42,7 @@ export default function DashboardPage() {
       <h1>ダッシュボード</h1>
       <p>ようこそ、{user.username}さん</p>
 
-      <a href="/study-records/new">学習記録を登録</a>
+      <Link href="/study-records/new">学習記録を登録</Link>
 
       {error && <ErrorMessage message={error} />}
 
