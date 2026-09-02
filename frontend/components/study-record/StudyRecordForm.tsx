@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import StarRating from "@/components/study-record/StarRating";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import { ApiError } from "@/lib/api";
 import { listCategories } from "@/lib/category";
 import type { Category } from "@/types/category";
@@ -137,7 +138,7 @@ export default function StudyRecordForm({
 
   return (
     <form onSubmit={handleSubmit}>
-      {categoriesError && <p role="alert">{categoriesError}</p>}
+      {categoriesError && <ErrorMessage message={categoriesError} />}
 
       <div>
         <label htmlFor="category_id">カテゴリ</label>
@@ -153,7 +154,7 @@ export default function StudyRecordForm({
             </option>
           ))}
         </select>
-        {fieldErrors.category_id && <p role="alert">{fieldErrors.category_id}</p>}
+        {fieldErrors.category_id && <ErrorMessage message={fieldErrors.category_id} />}
       </div>
 
       <div>
@@ -164,7 +165,7 @@ export default function StudyRecordForm({
           value={values.title}
           onChange={(e) => setValues({ ...values, title: e.target.value })}
         />
-        {fieldErrors.title && <p role="alert">{fieldErrors.title}</p>}
+        {fieldErrors.title && <ErrorMessage message={fieldErrors.title} />}
       </div>
 
       <div>
@@ -174,7 +175,7 @@ export default function StudyRecordForm({
           value={values.content}
           onChange={(e) => setValues({ ...values, content: e.target.value })}
         />
-        {fieldErrors.content && <p role="alert">{fieldErrors.content}</p>}
+        {fieldErrors.content && <ErrorMessage message={fieldErrors.content} />}
       </div>
 
       <div>
@@ -183,7 +184,9 @@ export default function StudyRecordForm({
           value={values.understanding_level}
           onChange={(level) => setValues({ ...values, understanding_level: level })}
         />
-        {fieldErrors.understanding_level && <p role="alert">{fieldErrors.understanding_level}</p>}
+        {fieldErrors.understanding_level && (
+          <ErrorMessage message={fieldErrors.understanding_level} />
+        )}
       </div>
 
       <div>
@@ -194,7 +197,7 @@ export default function StudyRecordForm({
           value={values.study_minutes}
           onChange={(e) => setValues({ ...values, study_minutes: Number(e.target.value) })}
         />
-        {fieldErrors.study_minutes && <p role="alert">{fieldErrors.study_minutes}</p>}
+        {fieldErrors.study_minutes && <ErrorMessage message={fieldErrors.study_minutes} />}
       </div>
 
       <div>
@@ -206,10 +209,10 @@ export default function StudyRecordForm({
           max={today()}
           onChange={(e) => setValues({ ...values, study_date: e.target.value })}
         />
-        {fieldErrors.study_date && <p role="alert">{fieldErrors.study_date}</p>}
+        {fieldErrors.study_date && <ErrorMessage message={fieldErrors.study_date} />}
       </div>
 
-      {formError && <p role="alert">{formError}</p>}
+      {formError && <ErrorMessage message={formError} />}
 
       <button type="submit" disabled={submitting}>
         {submitLabel}

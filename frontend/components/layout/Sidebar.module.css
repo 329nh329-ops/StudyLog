@@ -1,0 +1,74 @@
+.overlay {
+  display: none;
+}
+
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  border-right: 1px solid #e0e0e0;
+  background: #fafafa;
+  padding: 16px 0;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav a {
+  padding: 10px 20px;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.nav a:hover {
+  background: #eeeeee;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #e0e0e0;
+  margin: 12px 20px;
+}
+
+.logoutButton {
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  color: #333;
+}
+
+.logoutButton:hover {
+  background: #eeeeee;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    bottom: 0;
+    z-index: 30;
+    transform: translateX(-100%);
+    transition: transform 0.2s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .overlay.open {
+    display: block;
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 20;
+  }
+}
