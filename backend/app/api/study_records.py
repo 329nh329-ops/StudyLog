@@ -18,21 +18,6 @@ from app.services import study_record_service
 router = APIRouter(prefix="/api/study-records", tags=["study-records"])
 
 
-def _to_response(record) -> StudyRecordResponse:
-    return StudyRecordResponse(
-        id=record.id,
-        category_id=record.category_id,
-        category_name=record.category.name,
-        title=record.title,
-        content=record.content,
-        understanding_level=record.understanding_level,
-        study_minutes=record.study_minutes,
-        study_date=record.study_date,
-        created_at=record.created_at,
-        updated_at=record.updated_at,
-    )
-
-
 @router.get("", response_model=StudyRecordListResponse)
 def list_study_records(
     keyword: str | None = None,
@@ -58,7 +43,7 @@ def list_study_records(
     )
     total_pages = (total + page_size - 1) // page_size if total > 0 else 0
     return StudyRecordListResponse(
-        items=[_to_response(record) for record in items],
+        items=[StudyRecordResponse.from_model(record) for record in items],
         page=page,
         page_size=page_size,
         total=total,
@@ -73,7 +58,7 @@ def get_study_record(
     db: Session = Depends(get_db),
 ) -> StudyRecordResponse:
     record = study_record_service.get_study_record(db, record_id=record_id, user_id=current_user.id)
-    return _to_response(record)
+    return StudyRecordResponse.from_model(record)
 
 
 @router.post(
@@ -90,7 +75,7 @@ def create_study_record(
     record = study_record_service.create_study_record(
         db, user_id=current_user.id, fields=payload.model_dump()
     )
-    return _to_response(record)
+    return StudyRecordResponse.from_model(record)
 
 
 @router.put(
@@ -107,7 +92,7 @@ def update_study_record(
     record = study_record_service.update_study_record(
         db, record_id=record_id, user_id=current_user.id, fields=payload.model_dump()
     )
-    return _to_response(record)
+    return StudyRecordResponse.from_model(record)
 
 
 @router.delete(
