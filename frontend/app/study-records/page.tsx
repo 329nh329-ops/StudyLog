@@ -11,11 +11,8 @@ import {
   listStudyRecords,
   type StudyRecordSearchParams,
 } from "@/lib/study-record";
+import { understandingLevelStars } from "@/lib/understanding-level";
 import type { StudyRecord } from "@/types/study-record";
-
-function understandingLevelStars(level: number): string {
-  return "★".repeat(level) + "☆".repeat(5 - level);
-}
 
 export default function StudyRecordsPage() {
   const router = useRouter();
