@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { logout } from "@/lib/auth";
+import { useLogout } from "@/lib/auth-context";
 import styles from "./Header.module.css";
 
 interface HeaderProps {
@@ -11,13 +10,8 @@ interface HeaderProps {
 }
 
 export default function Header({ username, onMenuToggle }: HeaderProps) {
-  const router = useRouter();
+  const handleLogout = useLogout();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  async function handleLogout() {
-    await logout();
-    router.push("/login");
-  }
 
   return (
     <header className={styles.header}>

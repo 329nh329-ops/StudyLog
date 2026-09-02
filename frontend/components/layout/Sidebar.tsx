@@ -1,7 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { logout } from "@/lib/auth";
+import { useLogout } from "@/lib/auth-context";
 import type { Role } from "@/types/auth";
 import styles from "./Sidebar.module.css";
 
@@ -12,12 +11,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ role, open, onClose }: SidebarProps) {
-  const router = useRouter();
-
-  async function handleLogout() {
-    await logout();
-    router.push("/login");
-  }
+  const handleLogout = useLogout();
 
   return (
     <>

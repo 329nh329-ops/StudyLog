@@ -20,7 +20,7 @@ export default function LoginPage() {
 
     try {
       await login({ username, password });
-      router.push("/dashboard");
+      router.replace("/dashboard");
     } catch (error) {
       if (error instanceof ApiError) {
         setFormError(error.message);
