@@ -23,6 +23,15 @@ def list_users(
     return admin_service.list_users(db)
 
 
+@router.get("/users/{user_id}", response_model=UserResponse)
+def get_user(
+    user_id: int,
+    current_user: User = Depends(require_admin),
+    db: Session = Depends(get_db),
+) -> UserResponse:
+    return admin_service.get_user_or_404(db, user_id)
+
+
 @router.get("/users/{user_id}/study-records", response_model=StudyRecordListResponse)
 def list_user_study_records(
     user_id: int,

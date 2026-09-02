@@ -92,6 +92,39 @@ def test_list_users_forbidden_for_non_admin(client, db_session):
     assert response.json()["error"]["code"] == "ADMIN_REQUIRED"
 
 
+# --- 単一ユーザー取得 ---
+
+
+def test_get_user_success(client, db_session):
+    register_and_login(client, username="alice")
+    alice = db_session.query(User).filter(User.username == "alice").first()
+
+    register_and_login_as_admin(client, db_session, username="adminuser")
+    response = client.get(f"/api/admin/users/{alice.id}")
+    assert response.status_code == 200
+    body = response.json()
+    assert body["id"] == alice.id
+    assert body["username"] == "alice"
+    assert body["role"] == "USER"
+
+
+def test_get_user_nonexistent(client, db_session):
+    register_and_login_as_admin(client, db_session, username="adminuser")
+    response = client.get("/api/admin/users/999999")
+    assert response.status_code == 404
+    assert response.json()["error"]["code"] == "USER_NOT_FOUND"
+
+
+def test_get_user_forbidden_for_non_admin(client, db_session):
+    register_and_login(client, username="owner")
+    owner = db_session.query(User).filter(User.username == "owner").first()
+
+    register_and_login(client, username="bob")
+    response = client.get(f"/api/admin/users/{owner.id}")
+    assert response.status_code == 403
+    assert response.json()["error"]["code"] == "ADMIN_REQUIRED"
+
+
 # --- 他ユーザーの学習記録閲覧 ---
 
 

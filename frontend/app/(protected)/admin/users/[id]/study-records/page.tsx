@@ -7,7 +7,7 @@ import SearchForm from "@/components/study-record/SearchForm";
 import Pagination from "@/components/common/Pagination";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import { toErrorMessage } from "@/lib/api";
-import { getUserStudyRecords, listUsers } from "@/lib/admin";
+import { getUser, getUserStudyRecords } from "@/lib/admin";
 import type { StudyRecordSearchParams } from "@/lib/study-record";
 import { understandingLevelStars } from "@/lib/understanding-level";
 import type { StudyRecord } from "@/types/study-record";
@@ -29,10 +29,10 @@ export default function AdminUserStudyRecordsPage() {
   useEffect(() => {
     let cancelled = false;
 
-    listUsers()
-      .then((users) => {
+    getUser(userId)
+      .then((user) => {
         if (cancelled) return;
-        setTargetUser(users.find((u) => u.id === userId) ?? null);
+        setTargetUser(user);
       })
       .catch(() => {
         /* ユーザー名表示は補助情報のため、失敗しても一覧の取得は継続する */
