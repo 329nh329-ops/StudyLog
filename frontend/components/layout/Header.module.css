@@ -4,8 +4,8 @@
   justify-content: space-between;
   padding: 0 16px;
   height: 56px;
-  border-bottom: 1px solid #e0e0e0;
-  background: #ffffff;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface);
 }
 
 .left {
@@ -21,11 +21,13 @@
   font-size: 1.4rem;
   cursor: pointer;
   padding: 4px 8px;
+  color: var(--color-text-primary);
 }
 
 .logo {
   font-weight: bold;
   font-size: 1.1rem;
+  color: var(--color-text-primary);
 }
 
 .userMenu {
@@ -38,6 +40,7 @@
   font-size: 0.95rem;
   cursor: pointer;
   padding: 4px 8px;
+  color: var(--color-text-primary);
 }
 
 .dropdown {
@@ -45,10 +48,10 @@
   right: 0;
   top: 100%;
   margin-top: 4px;
-  background: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 4px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
   min-width: 120px;
   z-index: 20;
 }
@@ -62,10 +65,11 @@
   border: none;
   cursor: pointer;
   font-size: 0.9rem;
+  color: var(--color-text-primary);
 }
 
 .dropdown button:hover {
-  background: #f5f5f5;
+  background: var(--color-surface-hover);
 }
 
 @media (max-width: 768px) {
