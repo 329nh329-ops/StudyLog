@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import { toErrorMessage } from "@/lib/api";
 import { login } from "@/lib/auth";
@@ -58,6 +59,7 @@ export default function LoginPage() {
           ログイン
         </button>
       </form>
+      <Link href="/register">新規登録はこちら</Link>
     </main>
   );
 }
