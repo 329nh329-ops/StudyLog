@@ -5,8 +5,8 @@
 .sidebar {
   width: 200px;
   flex-shrink: 0;
-  border-right: 1px solid #e0e0e0;
-  background: #fafafa;
+  border-right: 1px solid var(--color-border);
+  background: var(--color-surface);
   padding: 16px 0;
 }
 
@@ -18,17 +18,18 @@
 
 .nav a {
   padding: 10px 20px;
-  color: #333;
+  color: var(--color-text-secondary);
   font-size: 0.95rem;
 }
 
 .nav a:hover {
-  background: #eeeeee;
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
 }
 
 .divider {
   border: none;
-  border-top: 1px solid #e0e0e0;
+  border-top: 1px solid var(--color-border);
   margin: 12px 20px;
 }
 
@@ -39,11 +40,12 @@
   cursor: pointer;
   padding: 10px 20px;
   font-size: 0.95rem;
-  color: #333;
+  color: var(--color-text-secondary);
 }
 
 .logoutButton:hover {
-  background: #eeeeee;
+  background: var(--color-surface-hover);
+  color: var(--color-text-primary);
 }
 
 @media (max-width: 768px) {
