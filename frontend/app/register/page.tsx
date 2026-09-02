@@ -4,8 +4,13 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import Button from "@/components/ui/Button";
+import Card from "@/components/ui/Card";
+import FormField from "@/components/ui/FormField";
+import PageHeader from "@/components/ui/PageHeader";
 import { getErrorDetails, toErrorMessage } from "@/lib/api";
 import { register } from "@/lib/auth";
+import styles from "./page.module.css";
 
 const USERNAME_PATTERN = /^[A-Za-z0-9_-]{1,25}$/;
 
@@ -86,51 +91,63 @@ export default function RegisterPage() {
   }
 
   return (
-    <main>
-      <h1>ユーザー登録</h1>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="username">ユーザー名</label>
-          <input
-            id="username"
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          {fieldErrors.username && <ErrorMessage message={fieldErrors.username} />}
+    <main className={styles.wrapper}>
+      <Card className={styles.card}>
+        <div className={styles.brand}>
+          <p className={styles.brandName}>StudyLog</p>
+          <p className={styles.brandTagline}>Learn. Track. Grow.</p>
         </div>
 
-        <div>
-          <label htmlFor="password">パスワード</label>
-          <input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          {fieldErrors.password && <ErrorMessage message={fieldErrors.password} />}
-        </div>
+        <PageHeader title="ユーザー登録" />
 
-        <div>
-          <label htmlFor="password_confirmation">パスワード確認</label>
-          <input
-            id="password_confirmation"
-            type="password"
-            value={passwordConfirmation}
-            onChange={(e) => setPasswordConfirmation(e.target.value)}
-          />
-          {fieldErrors.password_confirmation && (
-            <ErrorMessage message={fieldErrors.password_confirmation} />
-          )}
-        </div>
+        <form onSubmit={handleSubmit} className={styles.form}>
+          <FormField label="ユーザー名" htmlFor="username" error={fieldErrors.username}>
+            <input
+              id="username"
+              type="text"
+              className={styles.input}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </FormField>
 
-        {formError && <ErrorMessage message={formError} />}
+          <FormField label="パスワード" htmlFor="password" error={fieldErrors.password}>
+            <input
+              id="password"
+              type="password"
+              className={styles.input}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </FormField>
 
-        <button type="submit" disabled={submitting}>
-          登録する
-        </button>
-      </form>
-      <Link href="/login">ログインはこちら</Link>
+          <FormField
+            label="パスワード確認"
+            htmlFor="password_confirmation"
+            error={fieldErrors.password_confirmation}
+          >
+            <input
+              id="password_confirmation"
+              type="password"
+              className={styles.input}
+              value={passwordConfirmation}
+              onChange={(e) => setPasswordConfirmation(e.target.value)}
+            />
+          </FormField>
+
+          {formError && <ErrorMessage message={formError} />}
+
+          <Button type="submit" disabled={submitting} className={styles.submit}>
+            登録する
+          </Button>
+        </form>
+
+        <p className={styles.footer}>
+          <Link href="/login" className={styles.link}>
+            ログインはこちら
+          </Link>
+        </p>
+      </Card>
     </main>
   );
 }
