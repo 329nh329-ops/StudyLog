@@ -48,6 +48,11 @@ class CategoryNotFoundError(AppError):
     code = "CATEGORY_NOT_FOUND"
 
 
+class UserNotFoundError(AppError):
+    status_code = 404
+    code = "USER_NOT_FOUND"
+
+
 class CsrfTokenInvalidError(AppError):
     status_code = 403
     code = "CSRF_TOKEN_INVALID"
