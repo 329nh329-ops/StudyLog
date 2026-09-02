@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import { ApiError } from "@/lib/api";
 import { listUsers } from "@/lib/admin";
@@ -48,7 +49,7 @@ export default function AdminUsersPage() {
               <td>{user.username}</td>
               <td>{user.role}</td>
               <td>
-                <a href={`/admin/users/${user.id}/study-records`}>学習記録を見る</a>
+                <Link href={`/admin/users/${user.id}/study-records`}>学習記録を見る</Link>
               </td>
             </tr>
           ))}

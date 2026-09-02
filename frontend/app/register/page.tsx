@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import { ApiError } from "@/lib/api";
 import { register } from "@/lib/auth";
@@ -132,7 +133,7 @@ export default function RegisterPage() {
           登録する
         </button>
       </form>
-      <a href="/login">ログインはこちら</a>
+      <Link href="/login">ログインはこちら</Link>
     </main>
   );
 }

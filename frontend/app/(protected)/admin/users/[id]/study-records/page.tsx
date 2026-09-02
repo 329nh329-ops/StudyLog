@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Link from "next/link";
 import SearchForm from "@/components/study-record/SearchForm";
 import Pagination from "@/components/common/Pagination";
 import ErrorMessage from "@/components/common/ErrorMessage";
@@ -71,7 +72,7 @@ export default function AdminUserStudyRecordsPage() {
     <div>
       <h1>{targetUser ? `${targetUser.username} さんの学習記録` : "学習記録"}</h1>
 
-      <a href="/admin/users">ユーザー一覧に戻る</a>
+      <Link href="/admin/users">ユーザー一覧に戻る</Link>
 
       <SearchForm onSearch={handleSearch} />
 
