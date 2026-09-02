@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import { ApiError } from "@/lib/api";
 import { register } from "@/lib/auth";
 
@@ -98,7 +99,7 @@ export default function RegisterPage() {
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
-          {fieldErrors.username && <p role="alert">{fieldErrors.username}</p>}
+          {fieldErrors.username && <ErrorMessage message={fieldErrors.username} />}
         </div>
 
         <div>
@@ -109,7 +110,7 @@ export default function RegisterPage() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          {fieldErrors.password && <p role="alert">{fieldErrors.password}</p>}
+          {fieldErrors.password && <ErrorMessage message={fieldErrors.password} />}
         </div>
 
         <div>
@@ -121,11 +122,11 @@ export default function RegisterPage() {
             onChange={(e) => setPasswordConfirmation(e.target.value)}
           />
           {fieldErrors.password_confirmation && (
-            <p role="alert">{fieldErrors.password_confirmation}</p>
+            <ErrorMessage message={fieldErrors.password_confirmation} />
           )}
         </div>
 
-        {formError && <p role="alert">{formError}</p>}
+        {formError && <ErrorMessage message={formError} />}
 
         <button type="submit" disabled={submitting}>
           登録する

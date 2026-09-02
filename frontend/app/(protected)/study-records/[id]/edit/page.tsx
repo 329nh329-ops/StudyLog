@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import StudyRecordForm from "@/components/study-record/StudyRecordForm";
+import ErrorMessage from "@/components/common/ErrorMessage";
+import Loading from "@/components/common/Loading";
 import { ApiError } from "@/lib/api";
-import { getCurrentUser } from "@/lib/auth";
 import { getStudyRecord, updateStudyRecord } from "@/lib/study-record";
 import type { StudyRecordRequest } from "@/types/study-record";
 
@@ -19,15 +20,8 @@ export default function EditStudyRecordPage() {
   useEffect(() => {
     let cancelled = false;
 
-    getCurrentUser().then(async (user) => {
-      if (cancelled) return;
-      if (user === null) {
-        router.push("/login");
-        return;
-      }
-
-      try {
-        const record = await getStudyRecord(recordId);
+    getStudyRecord(recordId)
+      .then((record) => {
         if (cancelled) return;
         setInitialValues({
           category_id: record.category_id,
@@ -37,18 +31,16 @@ export default function EditStudyRecordPage() {
           study_minutes: record.study_minutes,
           study_date: record.study_date,
         });
-      } catch (e) {
+      })
+      .catch((e) => {
         if (cancelled) return;
-        setLoadError(
-          e instanceof ApiError ? e.message : "学習記録の取得に失敗しました。",
-        );
-      }
-    });
+        setLoadError(e instanceof ApiError ? e.message : "学習記録の取得に失敗しました。");
+      });
 
     return () => {
       cancelled = true;
     };
-  }, [router, recordId]);
+  }, [recordId]);
 
   async function handleSubmit(payload: StudyRecordRequest) {
     await updateStudyRecord(recordId, payload);
@@ -61,19 +53,19 @@ export default function EditStudyRecordPage() {
 
   if (loadError) {
     return (
-      <main>
+      <div>
         <h1>学習記録編集</h1>
-        <p role="alert">{loadError}</p>
-      </main>
+        <ErrorMessage message={loadError} />
+      </div>
     );
   }
 
   if (initialValues === null) {
-    return null;
+    return <Loading />;
   }
 
   return (
-    <main>
+    <div>
       <h1>学習記録編集</h1>
       <StudyRecordForm
         initialValues={initialValues}
@@ -81,6 +73,6 @@ export default function EditStudyRecordPage() {
         onCancel={handleCancel}
         submitLabel="更新する"
       />
-    </main>
+    </div>
   );
 }

@@ -1,11 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import SearchForm from "@/components/study-record/SearchForm";
 import Pagination from "@/components/common/Pagination";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import { ApiError } from "@/lib/api";
-import { getCurrentUser } from "@/lib/auth";
 import { getUserStudyRecords, listUsers } from "@/lib/admin";
 import type { StudyRecordSearchParams } from "@/lib/study-record";
 import { understandingLevelStars } from "@/lib/understanding-level";
@@ -13,11 +13,9 @@ import type { StudyRecord } from "@/types/study-record";
 import type { User } from "@/types/auth";
 
 export default function AdminUserStudyRecordsPage() {
-  const router = useRouter();
   const params = useParams<{ id: string }>();
   const userId = Number(params.id);
 
-  const [authorized, setAuthorized] = useState(false);
   const [targetUser, setTargetUser] = useState<User | null>(null);
 
   const [searchParams, setSearchParams] = useState<StudyRecordSearchParams>({});
@@ -30,38 +28,21 @@ export default function AdminUserStudyRecordsPage() {
   useEffect(() => {
     let cancelled = false;
 
-    getCurrentUser().then((user) => {
-      if (cancelled) return;
-      if (user === null) {
-        router.push("/login");
-        return;
-      }
-      if (user.role !== "ADMIN") {
-        router.push("/dashboard");
-        return;
-      }
-      setAuthorized(true);
-
-      listUsers()
-        .then((users) => {
-          if (cancelled) return;
-          setTargetUser(users.find((u) => u.id === userId) ?? null);
-        })
-        .catch(() => {
-          /* ユーザー名表示は補助情報のため、失敗しても一覧の取得は継続する */
-        });
-    });
+    listUsers()
+      .then((users) => {
+        if (cancelled) return;
+        setTargetUser(users.find((u) => u.id === userId) ?? null);
+      })
+      .catch(() => {
+        /* ユーザー名表示は補助情報のため、失敗しても一覧の取得は継続する */
+      });
 
     return () => {
       cancelled = true;
     };
-  }, [router, userId]);
+  }, [userId]);
 
   useEffect(() => {
-    if (!authorized) {
-      return;
-    }
-
     let cancelled = false;
 
     getUserStudyRecords(userId, { ...searchParams, page })
@@ -79,26 +60,22 @@ export default function AdminUserStudyRecordsPage() {
     return () => {
       cancelled = true;
     };
-  }, [authorized, userId, searchParams, page]);
+  }, [userId, searchParams, page]);
 
   function handleSearch(params: StudyRecordSearchParams) {
     setSearchParams(params);
     setPage(1);
   }
 
-  if (!authorized) {
-    return null;
-  }
-
   return (
-    <main>
+    <div>
       <h1>{targetUser ? `${targetUser.username} さんの学習記録` : "学習記録"}</h1>
 
       <a href="/admin/users">ユーザー一覧に戻る</a>
 
       <SearchForm onSearch={handleSearch} />
 
-      {error && <p role="alert">{error}</p>}
+      {error && <ErrorMessage message={error} />}
 
       <table>
         <thead>
@@ -124,6 +101,6 @@ export default function AdminUserStudyRecordsPage() {
       </table>
 
       <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
-    </main>
+    </div>
   );
 }

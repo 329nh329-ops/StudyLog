@@ -1,15 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import { ApiError } from "@/lib/api";
-import { getCurrentUser } from "@/lib/auth";
 import { createCategory, deleteCategory, listCategories, updateCategory } from "@/lib/category";
 import type { Category } from "@/types/category";
 
 export default function AdminCategoriesPage() {
-  const router = useRouter();
-  const [authorized, setAuthorized] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
   const [error, setError] = useState<string | null>(null);
 
@@ -23,26 +20,8 @@ export default function AdminCategoriesPage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    let cancelled = false;
-
-    getCurrentUser().then((user) => {
-      if (cancelled) return;
-      if (user === null) {
-        router.push("/login");
-        return;
-      }
-      if (user.role !== "ADMIN") {
-        router.push("/dashboard");
-        return;
-      }
-      setAuthorized(true);
-      loadCategories();
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [router]);
+    loadCategories();
+  }, []);
 
   async function loadCategories() {
     try {
@@ -108,15 +87,11 @@ export default function AdminCategoriesPage() {
     }
   }
 
-  if (!authorized) {
-    return null;
-  }
-
   return (
-    <main>
+    <div>
       <h1>カテゴリ管理</h1>
 
-      {error && <p role="alert">{error}</p>}
+      {error && <ErrorMessage message={error} />}
 
       <form onSubmit={handleCreate}>
         <label htmlFor="new-category-name">カテゴリ名</label>
@@ -129,7 +104,7 @@ export default function AdminCategoriesPage() {
         <button type="submit" disabled={creating}>
           追加する
         </button>
-        {createError && <p role="alert">{createError}</p>}
+        {createError && <ErrorMessage message={createError} />}
       </form>
 
       <table>
@@ -150,7 +125,7 @@ export default function AdminCategoriesPage() {
                       value={editingName}
                       onChange={(e) => setEditingName(e.target.value)}
                     />
-                    {editError && <p role="alert">{editError}</p>}
+                    {editError && <ErrorMessage message={editError} />}
                   </td>
                   <td>
                     <button
@@ -182,6 +157,6 @@ export default function AdminCategoriesPage() {
           ))}
         </tbody>
       </table>
-    </main>
+    </div>
   );
 }

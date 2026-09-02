@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import { ApiError } from "@/lib/api";
 import { login } from "@/lib/auth";
 
@@ -55,7 +56,7 @@ export default function LoginPage() {
           />
         </div>
 
-        {formError && <p role="alert">{formError}</p>}
+        {formError && <ErrorMessage message={formError} />}
 
         <button type="submit" disabled={submitting}>
           ログイン

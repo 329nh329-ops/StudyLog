@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Pagination from "@/components/common/Pagination";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import SearchForm from "@/components/study-record/SearchForm";
 import { ApiError } from "@/lib/api";
-import { getCurrentUser } from "@/lib/auth";
 import {
   deleteStudyRecord,
   listStudyRecords,
@@ -15,9 +14,6 @@ import { understandingLevelStars } from "@/lib/understanding-level";
 import type { StudyRecord } from "@/types/study-record";
 
 export default function StudyRecordsPage() {
-  const router = useRouter();
-  const [authorized, setAuthorized] = useState(false);
-
   const [searchParams, setSearchParams] = useState<StudyRecordSearchParams>({});
   const [page, setPage] = useState(1);
 
@@ -28,27 +24,6 @@ export default function StudyRecordsPage() {
   const [reloadCount, setReloadCount] = useState(0);
 
   useEffect(() => {
-    let cancelled = false;
-
-    getCurrentUser().then((user) => {
-      if (cancelled) return;
-      if (user === null) {
-        router.push("/login");
-        return;
-      }
-      setAuthorized(true);
-    });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [router]);
-
-  useEffect(() => {
-    if (!authorized) {
-      return;
-    }
-
     let cancelled = false;
 
     listStudyRecords({ ...searchParams, page })
@@ -66,7 +41,7 @@ export default function StudyRecordsPage() {
     return () => {
       cancelled = true;
     };
-  }, [authorized, searchParams, page, reloadCount]);
+  }, [searchParams, page, reloadCount]);
 
   function reload() {
     setReloadCount((count) => count + 1);
@@ -89,19 +64,15 @@ export default function StudyRecordsPage() {
     }
   }
 
-  if (!authorized) {
-    return null;
-  }
-
   return (
-    <main>
+    <div>
       <h1>学習記録一覧</h1>
 
       <a href="/study-records/new">学習記録を登録</a>
 
       <SearchForm onSearch={handleSearch} />
 
-      {error && <p role="alert">{error}</p>}
+      {error && <ErrorMessage message={error} />}
 
       <table>
         <thead>
@@ -134,6 +105,6 @@ export default function StudyRecordsPage() {
       </table>
 
       <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
-    </main>
+    </div>
   );
 }

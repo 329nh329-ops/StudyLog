@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import ErrorMessage from "@/components/common/ErrorMessage";
 import { ApiError } from "@/lib/api";
 import { listCategories } from "@/lib/category";
 import type { Category } from "@/types/category";
@@ -54,7 +55,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
 
   return (
     <form onSubmit={handleSubmit}>
-      {categoriesError && <p role="alert">{categoriesError}</p>}
+      {categoriesError && <ErrorMessage message={categoriesError} />}
 
       <div>
         <label htmlFor="search-keyword">キーワード</label>
