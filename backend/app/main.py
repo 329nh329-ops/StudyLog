@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.auth import router as auth_router
 from app.api.categories import router as categories_router
+from app.api.dashboard import router as dashboard_router
 from app.api.study_records import router as study_records_router
 from app.core.config import settings
 from app.exceptions.handlers import register_exception_handlers
@@ -22,6 +23,7 @@ register_exception_handlers(app)
 app.include_router(auth_router)
 app.include_router(study_records_router)
 app.include_router(categories_router)
+app.include_router(dashboard_router)
 
 
 @app.get("/health")

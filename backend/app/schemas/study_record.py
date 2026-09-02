@@ -61,6 +61,21 @@ class StudyRecordResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+    @classmethod
+    def from_model(cls, record) -> "StudyRecordResponse":
+        return cls(
+            id=record.id,
+            category_id=record.category_id,
+            category_name=record.category.name,
+            title=record.title,
+            content=record.content,
+            understanding_level=record.understanding_level,
+            study_minutes=record.study_minutes,
+            study_date=record.study_date,
+            created_at=record.created_at,
+            updated_at=record.updated_at,
+        )
+
 
 class StudyRecordListResponse(BaseModel):
     items: list[StudyRecordResponse]
