@@ -7,6 +7,10 @@ export function listUsers(): Promise<User[]> {
   return apiFetch<User[]>("/api/admin/users");
 }
 
+export function getUser(userId: number): Promise<User> {
+  return apiFetch<User>(`/api/admin/users/${userId}`);
+}
+
 export function getUserStudyRecords(
   userId: number,
   params: StudyRecordSearchParams = {},
