@@ -1,6 +1,7 @@
 import itertools
-from datetime import date, timedelta
+from datetime import timedelta
 
+from app.core.clock import today_jst
 from app.models.category import Category
 
 _category_name_counter = itertools.count()
@@ -39,7 +40,7 @@ def valid_payload(category_id, **overrides):
         "content": "テスト内容",
         "understanding_level": 3,
         "study_minutes": 60,
-        "study_date": str(date.today()),
+        "study_date": str(today_jst()),
     }
     payload.update(overrides)
     return payload
@@ -164,7 +165,7 @@ def test_create_study_record_study_minutes_out_of_range(client, db_session):
 def test_create_study_record_future_study_date(client, db_session):
     register_and_login(client)
     category = create_category(db_session)
-    tomorrow = str(date.today() + timedelta(days=1))
+    tomorrow = str(today_jst() + timedelta(days=1))
     response = client.post(
         "/api/study-records",
         json=valid_payload(category.id, study_date=tomorrow),
@@ -484,7 +485,7 @@ def test_list_study_records_multiple_conditions_and(client, db_session):
 def test_list_study_records_date_range(client, db_session):
     register_and_login(client)
     category = create_category(db_session)
-    today = date.today()
+    today = today_jst()
     old_date = today - timedelta(days=10)
 
     client.post(
