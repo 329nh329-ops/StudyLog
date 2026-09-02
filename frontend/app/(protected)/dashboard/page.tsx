@@ -9,7 +9,7 @@ import RecentRecords from "@/components/dashboard/RecentRecords";
 import StreakCard from "@/components/dashboard/StreakCard";
 import TodayStudyTime from "@/components/dashboard/TodayStudyTime";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import { ApiError } from "@/lib/api";
+import { toErrorMessage } from "@/lib/api";
 import { useAuthUser } from "@/lib/auth-context";
 import { getDashboard } from "@/lib/dashboard";
 import type { Dashboard } from "@/types/dashboard";
@@ -29,7 +29,7 @@ export default function DashboardPage() {
       })
       .catch((e) => {
         if (cancelled) return;
-        setError(e instanceof ApiError ? e.message : "ダッシュボードの取得に失敗しました。");
+        setError(toErrorMessage(e, "ダッシュボードの取得に失敗しました。"));
       });
 
     return () => {

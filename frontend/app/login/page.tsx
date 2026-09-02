@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import { ApiError } from "@/lib/api";
+import { toErrorMessage } from "@/lib/api";
 import { login } from "@/lib/auth";
 
 export default function LoginPage() {
@@ -22,11 +22,7 @@ export default function LoginPage() {
       await login({ username, password });
       router.replace("/dashboard");
     } catch (error) {
-      if (error instanceof ApiError) {
-        setFormError(error.message);
-      } else {
-        setFormError("ログインに失敗しました。しばらくしてから再度お試しください。");
-      }
+      setFormError(toErrorMessage(error, "ログインに失敗しました。しばらくしてから再度お試しください。"));
     } finally {
       setSubmitting(false);
     }

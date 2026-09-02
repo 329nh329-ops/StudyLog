@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import { ApiError } from "@/lib/api";
+import { toErrorMessage } from "@/lib/api";
 import { listCategories } from "@/lib/category";
 import type { Category } from "@/types/category";
 import type { StudyRecordSearchParams } from "@/lib/study-record";
@@ -28,7 +28,7 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
       .then(setCategories)
       .catch((e) => {
         setCategoriesError(
-          e instanceof ApiError ? e.message : "カテゴリ一覧の取得に失敗しました。",
+          toErrorMessage(e, "カテゴリ一覧の取得に失敗しました。"),
         );
       });
   }, []);

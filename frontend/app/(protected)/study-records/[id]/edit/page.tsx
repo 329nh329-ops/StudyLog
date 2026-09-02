@@ -5,7 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import StudyRecordForm from "@/components/study-record/StudyRecordForm";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Loading from "@/components/common/Loading";
-import { ApiError } from "@/lib/api";
+import { toErrorMessage } from "@/lib/api";
 import { getStudyRecord, updateStudyRecord } from "@/lib/study-record";
 import type { StudyRecordRequest } from "@/types/study-record";
 
@@ -34,7 +34,7 @@ export default function EditStudyRecordPage() {
       })
       .catch((e) => {
         if (cancelled) return;
-        setLoadError(e instanceof ApiError ? e.message : "学習記録の取得に失敗しました。");
+        setLoadError(toErrorMessage(e, "学習記録の取得に失敗しました。"));
       });
 
     return () => {

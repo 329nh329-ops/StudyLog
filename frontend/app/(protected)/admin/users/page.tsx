@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import { ApiError } from "@/lib/api";
+import { toErrorMessage } from "@/lib/api";
 import { listUsers } from "@/lib/admin";
 import type { User } from "@/types/auth";
 
@@ -21,7 +21,7 @@ export default function AdminUsersPage() {
       })
       .catch((e) => {
         if (cancelled) return;
-        setError(e instanceof ApiError ? e.message : "ユーザー一覧の取得に失敗しました。");
+        setError(toErrorMessage(e, "ユーザー一覧の取得に失敗しました。"));
       });
 
     return () => {

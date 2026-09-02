@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import StarRating from "@/components/study-record/StarRating";
 import ErrorMessage from "@/components/common/ErrorMessage";
-import { ApiError } from "@/lib/api";
+import { getErrorDetails, toErrorMessage } from "@/lib/api";
 import { listCategories } from "@/lib/category";
 import type { Category } from "@/types/category";
 import type { StudyRecordRequest } from "@/types/study-record";
@@ -83,9 +83,7 @@ export default function StudyRecordForm({
     listCategories()
       .then(setCategories)
       .catch((e) => {
-        setCategoriesError(
-          e instanceof ApiError ? e.message : "カテゴリ一覧の取得に失敗しました。",
-        );
+        setCategoriesError(toErrorMessage(e, "カテゴリ一覧の取得に失敗しました。"));
       });
   }, []);
 
@@ -123,14 +121,11 @@ export default function StudyRecordForm({
     try {
       await onSubmit(values);
     } catch (e) {
-      if (e instanceof ApiError) {
-        if (e.details) {
-          setFieldErrors(e.details);
-        }
-        setFormError(e.message);
-      } else {
-        setFormError("保存に失敗しました。しばらくしてから再度お試しください。");
+      const details = getErrorDetails(e);
+      if (details) {
+        setFieldErrors(details);
       }
+      setFormError(toErrorMessage(e, "保存に失敗しました。しばらくしてから再度お試しください。"));
     } finally {
       setSubmitting(false);
     }
