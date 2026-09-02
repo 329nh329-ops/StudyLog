@@ -1,6 +1,6 @@
 import itertools
-from datetime import date
 
+from app.core.clock import today_jst
 from app.models.category import Category
 from app.models.user import User
 
@@ -53,7 +53,7 @@ def valid_payload(category_id, **overrides):
         "content": "テスト内容",
         "understanding_level": 3,
         "study_minutes": 60,
-        "study_date": str(date.today()),
+        "study_date": str(today_jst()),
     }
     payload.update(overrides)
     return payload

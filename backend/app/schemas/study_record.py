@@ -2,6 +2,8 @@ from datetime import date, datetime
 
 from pydantic import BaseModel, ConfigDict, field_validator
 
+from app.core.clock import today_jst
+
 
 class StudyRecordRequest(BaseModel):
     category_id: int
@@ -42,7 +44,7 @@ class StudyRecordRequest(BaseModel):
     @field_validator("study_date")
     @classmethod
     def validate_study_date(cls, value: date) -> date:
-        if value > date.today():
+        if value > today_jst():
             raise ValueError("学習日には今日以前の日付を指定してください")
         return value
 

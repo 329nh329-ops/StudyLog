@@ -8,7 +8,6 @@ from sqlalchemy.orm import Session
 from app.core.dependencies import require_admin
 from app.db.database import get_db
 from app.models.user import User
-from app.repositories import study_record_repository
 from app.schemas.study_record import StudyRecordListResponse, StudyRecordResponse
 from app.schemas.user import UserResponse
 from app.services import admin_service
@@ -37,9 +36,7 @@ def list_user_study_records(
     current_user: User = Depends(require_admin),
     db: Session = Depends(get_db),
 ) -> StudyRecordListResponse:
-    admin_service.get_user_or_404(db, user_id)
-
-    items, total = study_record_repository.search(
+    items, total = admin_service.list_user_study_records(
         db,
         user_id=user_id,
         keyword=keyword,
