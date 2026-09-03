@@ -10,6 +10,7 @@ import StreakCard from "@/components/dashboard/StreakCard";
 import TodayStudyTime from "@/components/dashboard/TodayStudyTime";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Card from "@/components/ui/Card";
+import buttonStyles from "@/components/ui/Button.module.css";
 import PageHeader from "@/components/ui/PageHeader";
 import { toErrorMessage } from "@/lib/api";
 import { useAuthUser } from "@/lib/auth-context";
@@ -45,7 +46,14 @@ export default function DashboardPage() {
       <PageHeader
         title="ダッシュボード"
         description={`ようこそ、${user.username}さん`}
-        action={<Link href="/study-records/new">学習記録を登録</Link>}
+        action={
+          <Link
+            href="/study-records/new"
+            className={`${buttonStyles.primary} ${styles.registerButton}`}
+          >
+            ＋ 学習記録を登録
+          </Link>
+        }
       />
 
       {error && <ErrorMessage message={error} />}

@@ -1,5 +1,8 @@
 "use client";
 
+import Button from "@/components/ui/Button";
+import styles from "./Pagination.module.css";
+
 interface PaginationProps {
   page: number;
   totalPages: number;
@@ -12,20 +15,26 @@ export default function Pagination({ page, totalPages, onPageChange }: Paginatio
   }
 
   return (
-    <nav aria-label="ページネーション">
-      <button type="button" disabled={page <= 1} onClick={() => onPageChange(page - 1)}>
+    <nav aria-label="ページネーション" className={styles.nav}>
+      <Button
+        type="button"
+        variant="secondary"
+        disabled={page <= 1}
+        onClick={() => onPageChange(page - 1)}
+      >
         前へ
-      </button>
-      <span>
+      </Button>
+      <span className={styles.status}>
         {page} / {totalPages}
       </span>
-      <button
+      <Button
         type="button"
+        variant="secondary"
         disabled={page >= totalPages}
         onClick={() => onPageChange(page + 1)}
       >
         次へ
-      </button>
+      </Button>
     </nav>
   );
 }
