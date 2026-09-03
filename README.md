@@ -149,7 +149,9 @@ StudyLog/
 | 対象 | 件数 | フレームワーク |
 | --- | --- | --- |
 | Backend | 97件 | pytest |
-| Frontend | 17件（StarRating / Pagination / SearchForm） | Vitest + React Testing Library |
+| Frontend | 39件（16ファイル。共通UIコンポーネント、学習記録フォームコンポーネント、主要画面の表示確認） | Vitest + React Testing Library |
+
+テストの詳細（何をどのような観点でテストしているか）は [docs/テスト仕様書.md](docs/テスト仕様書.md) を参照。
 
 ```bash
 # Backend
