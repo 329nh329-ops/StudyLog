@@ -6,12 +6,16 @@ import Link from "next/link";
 import SearchForm from "@/components/study-record/SearchForm";
 import Pagination from "@/components/common/Pagination";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import buttonStyles from "@/components/ui/Button.module.css";
+import Card from "@/components/ui/Card";
+import PageHeader from "@/components/ui/PageHeader";
 import { toErrorMessage } from "@/lib/api";
 import { getUser, getUserStudyRecords } from "@/lib/admin";
 import type { StudyRecordSearchParams } from "@/lib/study-record";
 import { understandingLevelStars } from "@/lib/understanding-level";
 import type { StudyRecord } from "@/types/study-record";
 import type { User } from "@/types/auth";
+import styles from "./page.module.css";
 
 export default function AdminUserStudyRecordsPage() {
   const params = useParams<{ id: string }>();
@@ -70,36 +74,48 @@ export default function AdminUserStudyRecordsPage() {
 
   return (
     <div>
-      <h1>{targetUser ? `${targetUser.username} さんの学習記録` : "学習記録"}</h1>
+      <PageHeader
+        title={targetUser ? `${targetUser.username} さんの学習記録` : "学習記録"}
+        action={
+          <Link
+            href="/admin/users"
+            className={`${buttonStyles.secondary} ${styles.backButton}`}
+          >
+            ユーザー一覧に戻る
+          </Link>
+        }
+      />
 
-      <Link href="/admin/users">ユーザー一覧に戻る</Link>
-
-      <SearchForm onSearch={handleSearch} />
+      <Card className={styles.searchCard}>
+        <SearchForm onSearch={handleSearch} />
+      </Card>
 
       {error && <ErrorMessage message={error} />}
 
-      <table>
-        <thead>
-          <tr>
-            <th>学習日</th>
-            <th>カテゴリ</th>
-            <th>タイトル</th>
-            <th>学習時間</th>
-            <th>理解度</th>
-          </tr>
-        </thead>
-        <tbody>
-          {records.map((record) => (
-            <tr key={record.id}>
-              <td>{record.study_date}</td>
-              <td>{record.category_name}</td>
-              <td>{record.title}</td>
-              <td>{record.study_minutes}分</td>
-              <td>{understandingLevelStars(record.understanding_level)}</td>
+      <Card className={styles.tableCard}>
+        <table className={styles.table}>
+          <thead>
+            <tr>
+              <th>学習日</th>
+              <th>カテゴリ</th>
+              <th>タイトル</th>
+              <th>学習時間</th>
+              <th>理解度</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {records.map((record) => (
+              <tr key={record.id}>
+                <td>{record.study_date}</td>
+                <td>{record.category_name}</td>
+                <td>{record.title}</td>
+                <td>{record.study_minutes}分</td>
+                <td>{understandingLevelStars(record.understanding_level)}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </Card>
 
       <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
     </div>
