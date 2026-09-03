@@ -12,6 +12,10 @@
   flex: 1;
 }
 
+.createButton {
+  margin-bottom: var(--spacing-md);
+}
+
 .input {
   width: 100%;
 }
