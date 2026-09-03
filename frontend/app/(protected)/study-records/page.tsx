@@ -6,6 +6,7 @@ import Pagination from "@/components/common/Pagination";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import SearchForm from "@/components/study-record/SearchForm";
 import Button from "@/components/ui/Button";
+import buttonStyles from "@/components/ui/Button.module.css";
 import Card from "@/components/ui/Card";
 import PageHeader from "@/components/ui/PageHeader";
 import { toErrorMessage } from "@/lib/api";
@@ -73,7 +74,14 @@ export default function StudyRecordsPage() {
     <div>
       <PageHeader
         title="学習記録一覧"
-        action={<Link href="/study-records/new">学習記録を登録</Link>}
+        action={
+          <Link
+            href="/study-records/new"
+            className={`${buttonStyles.primary} ${styles.registerButton}`}
+          >
+            ＋ 学習記録を登録
+          </Link>
+        }
       />
 
       <Card className={styles.searchCard}>

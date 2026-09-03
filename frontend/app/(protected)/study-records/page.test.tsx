@@ -32,7 +32,7 @@ describe("StudyRecordsPage", () => {
     render(<StudyRecordsPage />);
 
     expect(screen.getByRole("heading", { name: "学習記録一覧" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "学習記録を登録" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "＋ 学習記録を登録" })).toHaveAttribute(
       "href",
       "/study-records/new",
     );
