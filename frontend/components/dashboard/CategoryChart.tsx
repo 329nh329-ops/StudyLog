@@ -25,7 +25,7 @@ export default function CategoryChart({ data }: CategoryChartProps) {
           <XAxis dataKey="category_name" stroke="var(--color-text-secondary)" tick={{ fill: "var(--color-text-secondary)" }} />
           <YAxis stroke="var(--color-text-secondary)" tick={{ fill: "var(--color-text-secondary)" }} />
           <Tooltip contentStyle={tooltipContentStyle} />
-          <Bar dataKey="minutes" name="学習時間（分）" fill="var(--color-accent)" />
+          <Bar dataKey="minutes" name="学習時間（分）" fill="var(--color-accent)" maxBarSize={55} />
         </BarChart>
       </ResponsiveContainer>
     </section>
