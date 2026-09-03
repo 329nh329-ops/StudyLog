@@ -141,7 +141,7 @@ export default function StudyRecordForm({
       <FormField label="カテゴリ" htmlFor="category_id" error={fieldErrors.category_id}>
         <select
           id="category_id"
-          className={styles.input}
+          className={styles.inputCompact}
           value={values.category_id}
           onChange={(e) => setValues({ ...values, category_id: Number(e.target.value) })}
         >
@@ -188,7 +188,7 @@ export default function StudyRecordForm({
         <input
           id="study_minutes"
           type="number"
-          className={styles.input}
+          className={styles.inputCompact}
           value={values.study_minutes}
           onChange={(e) => setValues({ ...values, study_minutes: Number(e.target.value) })}
         />
@@ -198,7 +198,7 @@ export default function StudyRecordForm({
         <input
           id="study_date"
           type="date"
-          className={styles.input}
+          className={styles.inputCompact}
           value={values.study_date}
           max={today()}
           onChange={(e) => setValues({ ...values, study_date: e.target.value })}

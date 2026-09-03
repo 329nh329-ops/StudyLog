@@ -112,7 +112,10 @@ export default function StudyRecordsPage() {
                 <td>{understandingLevelStars(record.understanding_level)}</td>
                 <td>
                   <div className={styles.actions}>
-                    <Link href={`/study-records/${record.id}/edit`} className={styles.editLink}>
+                    <Link
+                      href={`/study-records/${record.id}/edit`}
+                      className={`${buttonStyles.secondary} ${styles.editButton}`}
+                    >
                       編集
                     </Link>
                     <Button type="button" variant="danger" onClick={() => handleDelete(record)}>

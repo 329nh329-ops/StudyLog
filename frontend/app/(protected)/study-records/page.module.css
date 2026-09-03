@@ -43,10 +43,6 @@
   gap: var(--spacing-sm);
 }
 
-.editLink {
-  color: var(--color-accent);
-}
-
-.editLink:hover {
-  color: var(--color-accent-hover);
+.editButton {
+  display: inline-block;
 }

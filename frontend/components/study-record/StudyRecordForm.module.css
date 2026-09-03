@@ -2,10 +2,21 @@
   width: 100%;
 }
 
+.inputCompact {
+  width: 100%;
+  max-width: 240px;
+}
+
 .textarea {
   width: 100%;
   min-height: 160px;
   resize: vertical;
+}
+
+@media (max-width: 768px) {
+  .inputCompact {
+    max-width: 100%;
+  }
 }
 
 .ratingField {

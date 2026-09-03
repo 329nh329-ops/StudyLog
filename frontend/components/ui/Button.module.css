@@ -25,13 +25,13 @@
 }
 
 .secondary {
-  background: var(--color-surface);
+  background: var(--color-surface-hover);
   border-color: var(--color-border);
   color: var(--color-text-primary);
 }
 
 .secondary:hover:not(:disabled) {
-  background: var(--color-surface-hover);
+  background: var(--color-border);
 }
 
 .danger {
