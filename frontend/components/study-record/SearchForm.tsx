@@ -2,10 +2,13 @@
 
 import { useEffect, useState } from "react";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import Button from "@/components/ui/Button";
+import FormField from "@/components/ui/FormField";
 import { toErrorMessage } from "@/lib/api";
 import { listCategories } from "@/lib/category";
 import type { Category } from "@/types/category";
 import type { StudyRecordSearchParams } from "@/lib/study-record";
+import styles from "./SearchForm.module.css";
 
 interface SearchFormProps {
   onSearch: (params: StudyRecordSearchParams) => void;
@@ -54,75 +57,79 @@ export default function SearchForm({ onSearch }: SearchFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className={styles.form}>
       {categoriesError && <ErrorMessage message={categoriesError} />}
 
-      <div>
-        <label htmlFor="search-keyword">キーワード</label>
-        <input
-          id="search-keyword"
-          type="text"
-          value={keyword}
-          onChange={(e) => setKeyword(e.target.value)}
-        />
+      <div className={styles.grid}>
+        <FormField label="キーワード" htmlFor="search-keyword">
+          <input
+            id="search-keyword"
+            type="text"
+            className={styles.input}
+            value={keyword}
+            onChange={(e) => setKeyword(e.target.value)}
+          />
+        </FormField>
+
+        <FormField label="カテゴリ" htmlFor="search-category">
+          <select
+            id="search-category"
+            className={styles.input}
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
+          >
+            <option value="">すべて</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
+              </option>
+            ))}
+          </select>
+        </FormField>
+
+        <FormField label="理解度" htmlFor="search-understanding-level">
+          <select
+            id="search-understanding-level"
+            className={styles.input}
+            value={understandingLevel}
+            onChange={(e) => setUnderstandingLevel(e.target.value)}
+          >
+            <option value="">すべて</option>
+            {UNDERSTANDING_LEVELS.map((level) => (
+              <option key={level} value={level}>
+                {level}
+              </option>
+            ))}
+          </select>
+        </FormField>
+
+        <FormField label="学習日（開始）" htmlFor="search-date-from">
+          <input
+            id="search-date-from"
+            type="date"
+            className={styles.input}
+            value={dateFrom}
+            onChange={(e) => setDateFrom(e.target.value)}
+          />
+        </FormField>
+
+        <FormField label="学習日（終了）" htmlFor="search-date-to">
+          <input
+            id="search-date-to"
+            type="date"
+            className={styles.input}
+            value={dateTo}
+            onChange={(e) => setDateTo(e.target.value)}
+          />
+        </FormField>
       </div>
 
-      <div>
-        <label htmlFor="search-category">カテゴリ</label>
-        <select
-          id="search-category"
-          value={categoryId}
-          onChange={(e) => setCategoryId(e.target.value)}
-        >
-          <option value="">すべて</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
+      <div className={styles.actions}>
+        <Button type="submit">検索</Button>
+        <Button type="button" variant="secondary" onClick={handleReset}>
+          リセット
+        </Button>
       </div>
-
-      <div>
-        <label htmlFor="search-understanding-level">理解度</label>
-        <select
-          id="search-understanding-level"
-          value={understandingLevel}
-          onChange={(e) => setUnderstandingLevel(e.target.value)}
-        >
-          <option value="">すべて</option>
-          {UNDERSTANDING_LEVELS.map((level) => (
-            <option key={level} value={level}>
-              {level}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label htmlFor="search-date-from">学習日（開始）</label>
-        <input
-          id="search-date-from"
-          type="date"
-          value={dateFrom}
-          onChange={(e) => setDateFrom(e.target.value)}
-        />
-      </div>
-
-      <div>
-        <label htmlFor="search-date-to">学習日（終了）</label>
-        <input
-          id="search-date-to"
-          type="date"
-          value={dateTo}
-          onChange={(e) => setDateTo(e.target.value)}
-        />
-      </div>
-
-      <button type="submit">検索</button>
-      <button type="button" onClick={handleReset}>
-        リセット
-      </button>
     </form>
   );
 }
