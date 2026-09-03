@@ -6,6 +6,8 @@
   padding: var(--spacing-sm) var(--spacing-md);
   font-size: 0.95rem;
   cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .primary:disabled,
