@@ -1,3 +1,7 @@
+.registerButton {
+  display: inline-block;
+}
+
 .summaryGrid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
