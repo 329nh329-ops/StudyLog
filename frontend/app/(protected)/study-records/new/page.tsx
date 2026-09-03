@@ -2,6 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import StudyRecordForm from "@/components/study-record/StudyRecordForm";
+import Card from "@/components/ui/Card";
+import PageHeader from "@/components/ui/PageHeader";
 import { createStudyRecord } from "@/lib/study-record";
 import type { StudyRecordRequest } from "@/types/study-record";
 
@@ -19,8 +21,10 @@ export default function NewStudyRecordPage() {
 
   return (
     <div>
-      <h1>学習記録登録</h1>
-      <StudyRecordForm onSubmit={handleSubmit} onCancel={handleCancel} submitLabel="登録する" />
+      <PageHeader title="学習記録登録" />
+      <Card>
+        <StudyRecordForm onSubmit={handleSubmit} onCancel={handleCancel} submitLabel="登録する" />
+      </Card>
     </div>
   );
 }

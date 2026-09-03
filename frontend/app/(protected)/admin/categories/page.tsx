@@ -111,7 +111,7 @@ export default function AdminCategoriesPage() {
               />
             </div>
           </FormField>
-          <Button type="submit" disabled={creating}>
+          <Button type="submit" disabled={creating} className={styles.createButton}>
             追加する
           </Button>
         </form>
