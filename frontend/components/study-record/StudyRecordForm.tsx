@@ -3,10 +3,13 @@
 import { useEffect, useState } from "react";
 import StarRating from "@/components/study-record/StarRating";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import Button from "@/components/ui/Button";
+import FormField from "@/components/ui/FormField";
 import { getErrorDetails, toErrorMessage } from "@/lib/api";
 import { listCategories } from "@/lib/category";
 import type { Category } from "@/types/category";
 import type { StudyRecordRequest } from "@/types/study-record";
+import styles from "./StudyRecordForm.module.css";
 
 interface StudyRecordFormProps {
   initialValues?: StudyRecordRequest;
@@ -135,10 +138,10 @@ export default function StudyRecordForm({
     <form onSubmit={handleSubmit}>
       {categoriesError && <ErrorMessage message={categoriesError} />}
 
-      <div>
-        <label htmlFor="category_id">カテゴリ</label>
+      <FormField label="カテゴリ" htmlFor="category_id" error={fieldErrors.category_id}>
         <select
           id="category_id"
+          className={styles.input}
           value={values.category_id}
           onChange={(e) => setValues({ ...values, category_id: Number(e.target.value) })}
         >
@@ -149,32 +152,29 @@ export default function StudyRecordForm({
             </option>
           ))}
         </select>
-        {fieldErrors.category_id && <ErrorMessage message={fieldErrors.category_id} />}
-      </div>
+      </FormField>
 
-      <div>
-        <label htmlFor="title">タイトル</label>
+      <FormField label="タイトル" htmlFor="title" error={fieldErrors.title}>
         <input
           id="title"
           type="text"
+          className={styles.input}
           value={values.title}
           onChange={(e) => setValues({ ...values, title: e.target.value })}
         />
-        {fieldErrors.title && <ErrorMessage message={fieldErrors.title} />}
-      </div>
+      </FormField>
 
-      <div>
-        <label htmlFor="content">学習内容</label>
+      <FormField label="学習内容" htmlFor="content" error={fieldErrors.content}>
         <textarea
           id="content"
+          className={styles.textarea}
           value={values.content}
           onChange={(e) => setValues({ ...values, content: e.target.value })}
         />
-        {fieldErrors.content && <ErrorMessage message={fieldErrors.content} />}
-      </div>
+      </FormField>
 
-      <div>
-        <span>理解度</span>
+      <div className={styles.ratingField}>
+        <span className={styles.ratingLabel}>理解度</span>
         <StarRating
           value={values.understanding_level}
           onChange={(level) => setValues({ ...values, understanding_level: level })}
@@ -184,37 +184,37 @@ export default function StudyRecordForm({
         )}
       </div>
 
-      <div>
-        <label htmlFor="study_minutes">学習時間（分）</label>
+      <FormField label="学習時間（分）" htmlFor="study_minutes" error={fieldErrors.study_minutes}>
         <input
           id="study_minutes"
           type="number"
+          className={styles.input}
           value={values.study_minutes}
           onChange={(e) => setValues({ ...values, study_minutes: Number(e.target.value) })}
         />
-        {fieldErrors.study_minutes && <ErrorMessage message={fieldErrors.study_minutes} />}
-      </div>
+      </FormField>
 
-      <div>
-        <label htmlFor="study_date">学習日</label>
+      <FormField label="学習日" htmlFor="study_date" error={fieldErrors.study_date}>
         <input
           id="study_date"
           type="date"
+          className={styles.input}
           value={values.study_date}
           max={today()}
           onChange={(e) => setValues({ ...values, study_date: e.target.value })}
         />
-        {fieldErrors.study_date && <ErrorMessage message={fieldErrors.study_date} />}
-      </div>
+      </FormField>
 
       {formError && <ErrorMessage message={formError} />}
 
-      <button type="submit" disabled={submitting}>
-        {submitLabel}
-      </button>
-      <button type="button" onClick={onCancel}>
-        キャンセル
-      </button>
+      <div className={styles.actions}>
+        <Button type="submit" disabled={submitting}>
+          {submitLabel}
+        </Button>
+        <Button type="button" variant="secondary" onClick={onCancel}>
+          キャンセル
+        </Button>
+      </div>
     </form>
   );
 }

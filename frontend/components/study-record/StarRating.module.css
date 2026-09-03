@@ -1,0 +1,22 @@
+.group {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.star {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.4rem;
+  line-height: 1;
+  padding: var(--spacing-xs);
+  color: var(--color-text-muted);
+}
+
+.star:hover {
+  color: var(--color-accent-hover);
+}
+
+.starActive {
+  color: var(--color-accent);
+}

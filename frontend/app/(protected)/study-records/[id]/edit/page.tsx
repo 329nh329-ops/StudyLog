@@ -5,6 +5,8 @@ import { useParams, useRouter } from "next/navigation";
 import StudyRecordForm from "@/components/study-record/StudyRecordForm";
 import ErrorMessage from "@/components/common/ErrorMessage";
 import Loading from "@/components/common/Loading";
+import Card from "@/components/ui/Card";
+import PageHeader from "@/components/ui/PageHeader";
 import { toErrorMessage } from "@/lib/api";
 import { getStudyRecord, updateStudyRecord } from "@/lib/study-record";
 import type { StudyRecordRequest } from "@/types/study-record";
@@ -54,7 +56,7 @@ export default function EditStudyRecordPage() {
   if (loadError) {
     return (
       <div>
-        <h1>学習記録編集</h1>
+        <PageHeader title="学習記録編集" />
         <ErrorMessage message={loadError} />
       </div>
     );
@@ -66,13 +68,15 @@ export default function EditStudyRecordPage() {
 
   return (
     <div>
-      <h1>学習記録編集</h1>
-      <StudyRecordForm
-        initialValues={initialValues}
-        onSubmit={handleSubmit}
-        onCancel={handleCancel}
-        submitLabel="更新する"
-      />
+      <PageHeader title="学習記録編集" />
+      <Card>
+        <StudyRecordForm
+          initialValues={initialValues}
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+          submitLabel="更新する"
+        />
+      </Card>
     </div>
   );
 }
