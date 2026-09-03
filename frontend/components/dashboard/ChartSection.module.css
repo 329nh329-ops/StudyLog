@@ -1,0 +1,5 @@
+.heading {
+  font-size: 1rem;
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+}

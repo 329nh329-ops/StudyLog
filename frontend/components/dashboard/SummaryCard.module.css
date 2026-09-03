@@ -1,0 +1,12 @@
+.label {
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  font-weight: normal;
+}
+
+.value {
+  margin-top: var(--spacing-xs);
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: var(--color-text-primary);
+}

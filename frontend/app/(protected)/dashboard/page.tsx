@@ -9,10 +9,13 @@ import RecentRecords from "@/components/dashboard/RecentRecords";
 import StreakCard from "@/components/dashboard/StreakCard";
 import TodayStudyTime from "@/components/dashboard/TodayStudyTime";
 import ErrorMessage from "@/components/common/ErrorMessage";
+import Card from "@/components/ui/Card";
+import PageHeader from "@/components/ui/PageHeader";
 import { toErrorMessage } from "@/lib/api";
 import { useAuthUser } from "@/lib/auth-context";
 import { getDashboard } from "@/lib/dashboard";
 import type { Dashboard } from "@/types/dashboard";
+import styles from "./page.module.css";
 
 export default function DashboardPage() {
   const user = useAuthUser();
@@ -39,21 +42,41 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1>ダッシュボード</h1>
-      <p>ようこそ、{user.username}さん</p>
-
-      <Link href="/study-records/new">学習記録を登録</Link>
+      <PageHeader
+        title="ダッシュボード"
+        description={`ようこそ、${user.username}さん`}
+        action={<Link href="/study-records/new">学習記録を登録</Link>}
+      />
 
       {error && <ErrorMessage message={error} />}
 
       {dashboard && (
         <>
-          <TodayStudyTime minutes={dashboard.today_minutes} />
-          <StreakCard days={dashboard.streak_days} />
-          <DailyChart data={dashboard.daily_totals} />
-          <CategoryChart data={dashboard.category_totals} />
-          <MonthlyChart data={dashboard.monthly_totals} />
-          <RecentRecords records={dashboard.recent_records} />
+          <div className={styles.summaryGrid}>
+            <Card>
+              <TodayStudyTime minutes={dashboard.today_minutes} />
+            </Card>
+            <Card>
+              <StreakCard days={dashboard.streak_days} />
+            </Card>
+          </div>
+
+          <div className={styles.chartGrid}>
+            <Card>
+              <DailyChart data={dashboard.daily_totals} />
+            </Card>
+            <Card>
+              <CategoryChart data={dashboard.category_totals} />
+            </Card>
+          </div>
+
+          <Card className={styles.fullWidth}>
+            <MonthlyChart data={dashboard.monthly_totals} />
+          </Card>
+
+          <Card>
+            <RecentRecords records={dashboard.recent_records} />
+          </Card>
         </>
       )}
     </div>
