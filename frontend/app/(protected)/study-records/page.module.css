@@ -40,9 +40,13 @@
 .actions {
   display: flex;
   align-items: center;
+  flex-wrap: nowrap;
   gap: var(--spacing-sm);
 }
 
 .editButton {
   display: inline-block;
+  text-align: center;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
