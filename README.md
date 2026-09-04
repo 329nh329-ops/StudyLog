@@ -9,6 +9,7 @@ ITを学習しているユーザーが、学習内容・学習時間・理解度
 - [技術スタック](#技術スタック)
 - [技術選定理由](#技術選定理由)
 - [アーキテクチャ](#アーキテクチャ)
+- [本番デプロイ構成（AWS）](#本番デプロイ構成aws)
 - [ディレクトリ構成](#ディレクトリ構成)
 - [セキュリティ](#セキュリティ)
 - [テスト](#テスト)
@@ -78,6 +79,7 @@ ITを学習しているユーザーが、学習内容・学習時間・理解度
 | MySQL | 8.0（`docker-compose.yml`） |
 | Docker Compose | frontend / backend / db の3サービス構成 |
 | CI | GitHub Actions（PR時に自動実行） |
+| クラウド（本番デプロイ検証用） | AWS EC2（t3.micro） / Terraform（`terraform/`） |
 
 ## 技術選定理由
 
@@ -135,6 +137,59 @@ Next.jsのroute group（`(protected)`）で保護ページをまとめ、`(prote
 - JWTは**HttpOnly Cookie**に保存（有効期限1時間）
 - CSRF対策として**Double Submit Cookie方式**を採用（`csrf_token`Cookie + `X-CSRF-Token`ヘッダー）
 - 状態変更を伴うAPI（POST/PUT/DELETE）はCSRF検証必須
+
+## 本番デプロイ構成（AWS）
+
+個人利用・学習目的での実機デプロイ検証用に、AWS EC2 1台上にDocker Composeで本番相当の環境を構築できる構成を用意しています。独自ドメイン・HTTPSは対象外（パブリックIP + HTTPでのアクセス）です。
+
+```mermaid
+flowchart LR
+    User["利用者のブラウザ"] -->|HTTP :3000| EC2
+
+    subgraph EC2["EC2 (t3.micro) - Amazon Linux 2023"]
+        direction LR
+        FrontendC["frontendコンテナ<br/>Next.js production server<br/>:3000"]
+        BackendC["backendコンテナ<br/>FastAPI (uvicorn)<br/>:8000"]
+        DBC[("dbコンテナ<br/>MySQL<br/>:3306 (外部非公開)")]
+
+        FrontendC -->|REST API / JSON| BackendC
+        BackendC -->|SQLAlchemy| DBC
+    end
+
+    User -->|HTTP :8000| BackendC
+```
+
+- **EC2 1台構成**：frontend / backend / MySQLの3コンテナをDocker Composeで同一インスタンス上に同居させるシンプルな構成。個人利用の学習目的であり、可用性よりコストと構成のシンプルさを優先しています
+- **外部からのアクセス経路**：ブラウザ→EC2のパブリックIP（ポート3000でfrontend、8000でbackend API）のみ。SSH（22番）は管理用に別途開放
+- **MySQLは外部非公開**：`db`コンテナの3306番ポートはDocker Composeのネットワーク内でのみ到達可能で、Security Groupでも公開していません。DBへの外部からの直接アクセス経路はありません
+- **Security Group**：22（SSH）/ 3000（frontend）/ 8000（backend）のみを許可し、それ以外のインバウンドは許可していません
+
+### Terraformとデプロイスクリプトの責務分担
+
+インフラ構築とアプリケーションのデプロイは責務を分離しています。
+
+| 領域 | 担当 | 内容 |
+| --- | --- | --- |
+| AWSインフラの構築 | `terraform/` | EC2インスタンス、Security Group、SSHキーペアの作成、EC2上へのDocker / Docker Compose本体のインストール（起動時の`user_data`） |
+| アプリケーションのデプロイ | `deploy/deploy.sh` | 本番用Dockerイメージのbuild・EC2への転送・起動 |
+
+Terraformは「インスタンスがDockerを実行できる状態を作る」ところまでを担当し、アプリケーションのコンテナ自体はTerraformの管理対象に含めていません。
+
+### アプリケーションのデプロイ方式：ローカルビルド＋イメージ転送
+
+実機検証の結果、EC2上（t3.micro、メモリ1GB）でNext.jsの`npm run build`を直接実行すると、メモリ不足によりOSごと応答不能になる問題が確認されました（詳細は[docs/incidents/2026-09-03-ec2-build-oom.md](docs/incidents/2026-09-03-ec2-build-oom.md)）。
+
+この問題を避けるため、Dockerイメージのbuildはローカル(Mac)で行い、完成したイメージだけをEC2に転送する方式を採用しています。EC2側で発生する処理はコンテナの実行のみです。
+
+```mermaid
+flowchart LR
+    Build["ローカル(Mac)<br/>docker build (production)"] --> Save["docker save<br/>+ gzip"]
+    Save --> Transfer["scp転送"]
+    Transfer --> Load["EC2上で<br/>docker load"]
+    Load --> Up["docker compose up<br/>(コンテナ実行のみ)"]
+```
+
+`deploy/deploy.sh`がこの一連の流れを自動化しています。使い方は[deploy/deploy.sh](deploy/deploy.sh)のコメントを参照してください。
 
 ## ディレクトリ構成
 

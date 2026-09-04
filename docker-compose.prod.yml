@@ -1,10 +1,6 @@
 services:
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile.prod
-      args:
-        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
+    image: studylog-frontend:prod
     restart: unless-stopped
     ports:
       - "3000:3000"
@@ -12,9 +8,7 @@ services:
       - backend
 
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile.prod
+    image: studylog-backend:prod
     restart: unless-stopped
     ports:
       - "8000:8000"
