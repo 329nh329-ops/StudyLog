@@ -17,12 +17,3 @@ output "ssh_command" {
   description = "SSH command to connect to the instance"
   value       = "ssh -i ${path.module}/studylog-key.pem ec2-user@${aws_instance.app.public_ip}"
 }
-
-output "seed_admin_username" {
-  value = var.seed_admin_username
-}
-
-output "seed_admin_password" {
-  value     = local.seed_admin_password
-  sensitive = true
-}

@@ -24,23 +24,6 @@ data "aws_ami" "amazon_linux" {
   }
 }
 
-resource "random_password" "jwt_secret" {
-  count   = var.jwt_secret_key == "" ? 1 : 0
-  length  = 48
-  special = false
-}
-
-resource "random_password" "admin_password" {
-  count   = var.seed_admin_password == "" ? 1 : 0
-  length  = 20
-  special = true
-}
-
-locals {
-  jwt_secret_key       = var.jwt_secret_key != "" ? var.jwt_secret_key : random_password.jwt_secret[0].result
-  seed_admin_password  = var.seed_admin_password != "" ? var.seed_admin_password : random_password.admin_password[0].result
-}
-
 resource "tls_private_key" "ssh" {
   algorithm = "RSA"
   rsa_bits  = 4096
@@ -100,23 +83,17 @@ resource "aws_security_group" "this" {
 
 resource "aws_instance" "app" {
   ami                    = data.aws_ami.amazon_linux.id
-  instance_type           = var.instance_type
-  subnet_id               = data.aws_subnets.default.ids[0]
-  vpc_security_group_ids  = [aws_security_group.this.id]
-  key_name                = aws_key_pair.this.key_name
+  instance_type          = var.instance_type
+  subnet_id              = data.aws_subnets.default.ids[0]
+  vpc_security_group_ids = [aws_security_group.this.id]
+  key_name               = aws_key_pair.this.key_name
 
   root_block_device {
     volume_type = "gp3"
     volume_size = 20
   }
 
-  user_data = templatefile("${path.module}/user_data.sh.tpl", {
-    repo_url             = var.repo_url
-    repo_branch           = var.repo_branch
-    jwt_secret_key         = local.jwt_secret_key
-    seed_admin_username    = var.seed_admin_username
-    seed_admin_password    = local.seed_admin_password
-  })
+  user_data = file("${path.module}/user_data.sh.tpl")
 
   tags = {
     Name = "studylog-app"

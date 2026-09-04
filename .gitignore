@@ -18,3 +18,7 @@ terraform/terraform.tfvars
 terraform/*.pem
 
 terraform/tfplan
+
+# Deploy (production secrets)
+deploy/env.prod.local
+deploy/*.pem
