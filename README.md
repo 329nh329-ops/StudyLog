@@ -64,8 +64,6 @@ https://github.com/user-attachments/assets/af2f060c-7659-41ea-abfc-2547e655e046
 | pytest | 8.3.4 |
 | Ruff（Lint / Format） | 0.8.4 |
 
-> **既知の差異**：実行環境（Docker）はPython 3.12、CIのテスト実行およびRuffの`target-version`は3.11に設定されており、バージョンが揃っていません。将来的にどちらかへ統一する予定です。
-
 ### Frontend
 
 | 技術 | バージョン |
@@ -109,7 +107,7 @@ https://github.com/user-attachments/assets/af2f060c-7659-41ea-abfc-2547e655e046
 ### インフラ・開発基盤
 
 - **Docker / Docker Compose**：フロントエンド・バックエンド・DBという3つの独立したサービスを、開発者のローカル環境差異に依存せず同じ手順で再現できるようにするため
-- **GitHub Actions**：Issue → Branch → PRというGitフローの実践に合わせ、PRごとに自動テスト・Lintを実行するCI/CDパイプラインを構築する経験を積む
+- **GitHub Actions**：Pull Requestごとに自動テスト・Lintを実行するCI/CDパイプラインを構築する経験を積む
 
 ### 可視化
 
@@ -184,7 +182,7 @@ Terraformは「インスタンスがDockerを実行できる状態を作る」�
 
 ### アプリケーションのデプロイ方式：ローカルビルド＋イメージ転送
 
-実機検証の結果、EC2上（t3.micro、メモリ1GB）でNext.jsの`npm run build`を直接実行すると、メモリ不足によりOSごと応答不能になる問題が確認されました（詳細は[docs/incidents/2026-09-03-ec2-build-oom.md](docs/incidents/2026-09-03-ec2-build-oom.md)）。
+実機検証の結果、EC2上（t3.micro、メモリ1GB）でNext.jsの`npm run build`を直接実行すると、メモリ不足によりOSごと応答不能になる問題が確認されました。
 
 この問題を避けるため、Dockerイメージのbuildはローカル(Mac)で行い、完成したイメージだけをEC2に転送する方式を採用しています。EC2側で発生する処理はコンテナの実行のみです。
 
@@ -196,7 +194,7 @@ flowchart LR
     Load --> Up["docker compose up<br/>(コンテナ実行のみ)"]
 ```
 
-`deploy/deploy.sh`がこの一連の流れを自動化しています。使い方は[deploy/deploy.sh](deploy/deploy.sh)のコメントを参照してください。
+この一連の流れはデプロイスクリプトにより自動化されています。
 
 ## ディレクトリ構成
 
@@ -221,7 +219,6 @@ StudyLog/
 │   ├── components/        # layout / study-record / dashboard / common
 │   ├── lib/                # API通信・認証状態管理
 │   └── types/               # 型定義
-├── docs/incidents/        # 開発中に発生した問題の調査記録
 └── .github/workflows/     # CI設定
 ```
 
@@ -285,9 +282,10 @@ docker compose run --rm backend python -m app.db.seed
 - バックエンドAPI: http://localhost:8000 （`/health` でヘルスチェック、`/docs` でSwagger UI）
 - MySQL: localhost:3306
 
-seedスクリプトにより、初期カテゴリ（Java, Spring Boot, JavaScript, TypeScript, React, Next.js, Python, SQL, AWS, Git, Docker, その他）と管理者アカウント（`.env`の`SEED_ADMIN_USERNAME` / `SEED_ADMIN_PASSWORD`、デフォルトは`admin` / `ChangeMe123`）が作成されます。
+seedスクリプトにより、初期カテゴリ（Java, Spring Boot, JavaScript, TypeScript, React, Next.js, Python, SQL, AWS, Git, Docker, その他）と管理者アカウント（`.env`の`SEED_ADMIN_USERNAME` / `SEED_ADMIN_PASSWORD`で指定。例：`admin` / `ChangeMe123`）が作成されます。**本番運用時は必ず`.env`で独自の値に変更してください。**
 
 ## ドキュメント
 
-- [docs/incidents/](docs/incidents/)：開発中に発生したエラー・不具合の調査記録
-- [CLAUDE.md](CLAUDE.md)：開発運用ルール（Git運用、エラー調査の記録方針）
+- [docs/要件定義.md](docs/要件定義.md)：要件定義書
+- [docs/specifications/開発仕様書.md](docs/specifications/開発仕様書.md)：開発仕様書
+- [docs/テスト仕様書.md](docs/テスト仕様書.md)：テスト仕様書
